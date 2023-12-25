@@ -18,16 +18,16 @@ func main() {
 	db := config.DatabaseConnection()
 
 	// repository
-	bookRepository := repository.NewBookRepository(db)
+	taskRepository := repository.NewTaskRepository(db)
 
 	// service
-	bookService := service.NewBookServiceImpl(bookRepository)
+	taskService := service.NewTaskServiceImpl(taskRepository)
 
 	// controller
-	bookController := controller.NewBookController(bookService)
+	taskController := controller.NewTaskController(taskService)
 
 	// routes
-	routes := router.NewRouter(bookController)
+	routes := router.NewRouter(taskController)
 
 	server := http.Server{Addr: "localhost:8881", Handler: routes}
 

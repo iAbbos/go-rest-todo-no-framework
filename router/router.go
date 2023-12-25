@@ -8,18 +8,18 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
-func NewRouter(bookController *controller.BookController) *httprouter.Router {
+func NewRouter(taskController *controller.TaskController) *httprouter.Router {
 	router := httprouter.New()
 
 	router.GET("/", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 		fmt.Fprintf(w, "I'm Working!")
 	})
 
-	router.GET("/api/books", bookController.FindAll)
-	router.GET("/api/books/:bookId", bookController.FindById)
-	router.POST("/api/books", bookController.Create)
-	router.PUT("/api/books/:bookId", bookController.Update)
-	router.DELETE("/api/books/:bookId", bookController.Delete)
+	router.GET("/api/tasks", taskController.FindAll)
+	router.GET("/api/tasks/:taskId", taskController.FindById)
+	router.POST("/api/tasks", taskController.Create)
+	router.PUT("/api/tasks/:taskId", taskController.Update)
+	router.DELETE("/api/tasks/:taskId", taskController.Delete)
 
 	return router
 }

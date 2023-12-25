@@ -11,20 +11,20 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
-type BookController struct {
-	BookService service.BookService
+type TaskController struct {
+	TaskService service.TaskService
 }
 
-func NewBookController(bookService service.BookService) *BookController {
-	return &BookController{BookService: bookService}
+func NewTaskController(taskService service.TaskService) *TaskController {
+	return &TaskController{TaskService: taskService}
 }
 
 // Create
-func (controller *BookController) Create(write http.ResponseWriter, requests *http.Request, params httprouter.Params) {
-	bookCreateRequest := request.BookCreateRequest{}
-	helpers.ReadRequestBody(requests, &bookCreateRequest)
+func (controller *TaskController) Create(write http.ResponseWriter, requests *http.Request, params httprouter.Params) {
+	taskCreateRequest := request.TaskCreateRequest{}
+	helpers.ReadRequestBody(requests, &taskCreateRequest)
 
-	controller.BookService.Create(requests.Context(), bookCreateRequest)
+	controller.TaskService.Create(requests.Context(), taskCreateRequest)
 
 	webResponse := response.WebResponse{
 		Code:   200,
@@ -36,15 +36,15 @@ func (controller *BookController) Create(write http.ResponseWriter, requests *ht
 }
 
 // Update
-func (controller *BookController) Update(write http.ResponseWriter, requests *http.Request, params httprouter.Params) {
-	bookUpdateRequest := request.BookUpdateRequest{}
-	helpers.ReadRequestBody(requests, &bookUpdateRequest)
+func (controller *TaskController) Update(write http.ResponseWriter, requests *http.Request, params httprouter.Params) {
+	taskUpdateRequest := request.TaskUpdateRequest{}
+	helpers.ReadRequestBody(requests, &taskUpdateRequest)
 
-	bookId := params.ByName("bookId")
-	id, err := strconv.Atoi(bookId)
+	taskId := params.ByName("taskId")
+	id, err := strconv.Atoi(taskId)
 	helpers.PanicIfError(err)
-	bookUpdateRequest.ID = id
-	controller.BookService.Update(requests.Context(), bookUpdateRequest)
+	taskUpdateRequest.ID = id
+	controller.TaskService.Update(requests.Context(), taskUpdateRequest)
 
 	webResponse := response.WebResponse{
 		Code:   200,
@@ -56,12 +56,12 @@ func (controller *BookController) Update(write http.ResponseWriter, requests *ht
 }
 
 // Delete
-func (controller *BookController) Delete(write http.ResponseWriter, request *http.Request, params httprouter.Params) {
-	bookId := params.ByName("bookId")
-	id, err := strconv.Atoi(bookId)
+func (controller *TaskController) Delete(write http.ResponseWriter, request *http.Request, params httprouter.Params) {
+	taskId := params.ByName("taskId")
+	id, err := strconv.Atoi(taskId)
 	helpers.PanicIfError(err)
 
-	controller.BookService.Delete(request.Context(), id)
+	controller.TaskService.Delete(request.Context(), id)
 	webResponse := response.WebResponse{
 		Code:   200,
 		Status: "OK",
@@ -71,8 +71,8 @@ func (controller *BookController) Delete(write http.ResponseWriter, request *htt
 }
 
 // FindAll
-func (controller *BookController) FindAll(write http.ResponseWriter, request *http.Request, params httprouter.Params) {
-	result := controller.BookService.FindAll(request.Context())
+func (controller *TaskController) FindAll(write http.ResponseWriter, request *http.Request, params httprouter.Params) {
+	result := controller.TaskService.FindAll(request.Context())
 	webResponse := response.WebResponse{
 		Code:   200,
 		Status: "OK",
@@ -83,12 +83,12 @@ func (controller *BookController) FindAll(write http.ResponseWriter, request *ht
 }
 
 // FindById
-func (controller *BookController) FindById(write http.ResponseWriter, request *http.Request, params httprouter.Params) {
-	bookId := params.ByName("bookId")
-	id, err := strconv.Atoi(bookId)
+func (controller *TaskController) FindById(write http.ResponseWriter, request *http.Request, params httprouter.Params) {
+	taskId := params.ByName("taskId")
+	id, err := strconv.Atoi(taskId)
 	helpers.PanicIfError(err)
 
-	result := controller.BookService.FindById(request.Context(), id)
+	result := controller.TaskService.FindById(request.Context(), id)
 	webResponse := response.WebResponse{
 		Code:   200,
 		Status: "OK",

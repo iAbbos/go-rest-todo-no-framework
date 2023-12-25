@@ -5,12 +5,11 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"golang-crud/config"
 	"golang-crud/helpers"
 	"golang-crud/models"
 )
 
-const DB_NAME = config.DB_NAME
+const DB_NAME = "tasks"
 
 type TaskRepositoryImpl struct {
 	Db *sql.DB
@@ -47,7 +46,7 @@ func (taskRepo *TaskRepositoryImpl) FindAll(ctx context.Context) []models.Task {
 	for result.Next() {
 		var task models.Task
 
-		errScan := result.Scan(&task.ID, &task.Name)
+		errScan := result.Scan(&task.ID, &task.Name, &task.Note, &task.Date, &task.Status)
 		helpers.PanicIfError(errScan)
 
 		tasks = append(tasks, task)
@@ -71,7 +70,7 @@ func (taskRepo *TaskRepositoryImpl) FindById(ctx context.Context, taskId int) (m
 	var task models.Task
 
 	if result.Next() {
-		errScan := result.Scan(&task.ID, &task.Name)
+		errScan := result.Scan(&task.ID, &task.Name, &task.Note, &task.Date, &task.Status)
 		helpers.PanicIfError(errScan)
 		return task, nil
 	} else {
@@ -84,7 +83,7 @@ func (taskRepo *TaskRepositoryImpl) Save(ctx context.Context, task models.Task) 
 	helpers.PanicIfError(err)
 	defer helpers.CommitOrRollback(tx)
 
-	SQL := fmt.Sprintf("INSERT INTO %s (name, note, status, date) VALUES ($1, $2, $3, $4)", DB_NAME)
+	SQL := fmt.Sprintf("INSERT INTO %s (name, note, status, task_date) VALUES ($1, $2, $3, $4)", DB_NAME)
 
 	_, errExec := tx.ExecContext(
 		ctx,
